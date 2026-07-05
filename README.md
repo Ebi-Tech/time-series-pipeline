@@ -25,10 +25,20 @@ time-series-pipeline/
 │   └── sql_routes.py             # standalone SQL Flask routes (reference)
 ├── notebooks/
 │   └── task1_time_series_forecasting.ipynb   # EDA, feature engineering, model training
-├── app.py                        # combined Flask API (SQL + Mongo routes)
-├── predict.py                    # Task 4: fetch → preprocess → predict
+├── scripts/
+│   ├── app.py                    # combined Flask API (SQL + Mongo routes)
+│   └── predict.py                # Task 4: fetch → preprocess → predict
 ├── requirements.txt               # pinned dependencies (pip freeze)
 └── README.md
+```
+
+**Note:** `app.py` and `predict.py` live in `scripts/`, but both must be run
+from the project root (not from inside `scripts/`) so their relative paths
+to `models/` resolve correctly:
+
+```bash
+python3 scripts/app.py
+python3 scripts/predict.py
 ```
 
 ## Prerequisites
@@ -116,7 +126,7 @@ python3 load_data.py
 ### 5. Run the API
 
 ```bash
-python3 app.py
+python3 scripts/app.py
 ```
 
 This starts a single Flask server on `http://localhost:5000` exposing both
@@ -137,12 +147,27 @@ With `app.py` running in one terminal, open a second terminal, activate the
 venv again (`source venv/bin/activate`), and run:
 
 ```bash
-python3 predict.py
+python3 scripts/predict.py
 ```
 
 This fetches the latest reading from the API, builds the feature vector the
 model expects, and prints a demand forecast alongside the actual recorded
 value for comparison.
+
+**Confirmed working output (test run):**
+```
+Fetching latest record from API...
+Fetched reading from 2018-08-03T00:00:00 (region: PJM East)
+Preprocessing features...
+Feature vector: [38500.0, 37158.0, 35742.0, 39523.375, 35879.976, 0, 4, 8]
+Loading trained model...
+Generating forecast...
+
+--- Forecast Result ---
+Timestamp:         2018-08-03T00:00:00
+Actual demand_mw:  35486.0
+Predicted demand:  38213.68 MW
+```
 
 ## Troubleshooting
 
@@ -153,7 +178,17 @@ value for comparison.
 | `error: externally-managed-environment` | macOS/Homebrew Python blocks global `pip install` (PEP 668) | Use a virtual environment (see Setup step 1) instead of installing globally |
 | `pymongo.errors.ServerSelectionTimeoutError: ... Connection refused` | MongoDB server isn't installed or isn't running | Run `brew services list` to check; install/start with the commands in Setup step 2 |
 | `mysql.connector.errors.*` connection errors | MySQL isn't running, or `energy_db` doesn't exist, or credentials in `app.py` don't match | Confirm `brew services list` shows mysql started; re-check `MYSQL_CONFIG` in `app.py` |
-| `predict.py` fails with a connection error | `app.py` isn't running | Start `python3 app.py` in a separate terminal first, then re-run `predict.py` |
+| `predict.py` fails with a connection error | `app.py` isn't running | Start `python3 scripts/app.py` in a separate terminal first, then re-run `python3 scripts/predict.py` |
+
+**Expected (harmless) warnings when running `predict.py`:**
+- `InconsistentVersionWarning` — the model was pickled with a different
+  scikit-learn version than the one installed. Safe to ignore as long as a
+  prediction is still produced; re-train and re-save the model if this ever
+  causes an actual crash rather than just a warning.
+- `X does not have valid feature names, but Ridge was fitted with feature
+  names` — the model was trained on a pandas DataFrame (with column names)
+  but `predict.py` passes a plain list. Cosmetic only; the prediction is
+  unaffected.
 
 ## Why predict.py queries MongoDB, not SQL
 
