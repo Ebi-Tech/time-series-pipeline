@@ -11,9 +11,12 @@ MONGO_URI = "mongodb://localhost:27017"
 DB_NAME = "energy_db"
 COLLECTION_NAME = "readings"
 
+# Single shared client for the lifetime of the app, instead of opening a new
+# connection on every request. 
+client = MongoClient(MONGO_URI)
+
 
 def get_collection():
-    client = MongoClient(MONGO_URI)
     return client[DB_NAME][COLLECTION_NAME]
 
 
@@ -31,10 +34,23 @@ def create_reading():
     data = request.json
     collection = get_collection()
 
+    # Validate required fields before building the document. This only
+    # changes behavior for requests that were previously missing/invalid
+    # (which used to crash with an unhandled 500); well-formed requests
+    # produce the exact same document and response as before.
+    if not data or "timestamp" not in data or "demand_mw" not in data:
+        return jsonify({"error": "timestamp and demand_mw are required"}), 400
+
+    try:
+        timestamp = datetime.fromisoformat(data["timestamp"])
+        demand_mw = float(data["demand_mw"])
+    except (ValueError, TypeError):
+        return jsonify({"error": "invalid timestamp or demand_mw"}), 400
+
     document = {
         "region": data.get("region", "PJM East"),
-        "timestamp": datetime.fromisoformat(data["timestamp"]),
-        "demand_mw": float(data["demand_mw"]),
+        "timestamp": timestamp,
+        "demand_mw": demand_mw,
         "features": data.get("features", {}),
     }
 

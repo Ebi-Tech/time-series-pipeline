@@ -61,6 +61,16 @@ def main():
     df = pd.read_csv(CSV_PATH, parse_dates=["Datetime"])
     print(f"Loaded {len(df)} rows from {CSV_PATH}")
 
+    # Warn about duplicate timestamps up front. The unique index created at
+    # the end of this script would otherwise reject them mid-batch. This is
+    # a read-only check: it does not drop rows or alter the CSV, so the set
+    # of documents inserted is unchanged if there are no duplicates.
+    duplicate_count = df["Datetime"].duplicated().sum()
+    if duplicate_count > 0:
+        print(f"WARNING: {duplicate_count} duplicate timestamp(s) found in CSV. "
+              f"insert_many will fail on the batch containing them because of "
+              f"the unique index on 'timestamp'.")
+
     client = MongoClient(MONGO_URI)
     db = client[DB_NAME]
     collection = db[COLLECTION_NAME]
