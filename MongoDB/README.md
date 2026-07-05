@@ -51,15 +51,6 @@ Index: ascending unique index on `timestamp` (supports the "latest" and
      Accept the UAC prompt when it appears. This installs `mongod` as a
      Windows service (`MongoDB`) listening on `localhost:27017`, started
      automatically on boot.
-   - **Portable, no admin rights** (what this machine actually uses, since
-     this session had no interactive desktop to approve the UAC prompt):
-     download `mongodb-windows-x86_64-8.3.4.zip` from
-     `https://fastdl.mongodb.org/windows/`, extract it, then run
-     ```
-     mongod.exe --dbpath <some-folder-for-data> --port 27017
-     ```
-     in its own terminal window and leave it running. There's no service to
-     restart — just re-run that command each time you want the database up.
 2. Install the Python driver and Flask:
    ```
    pip install pymongo flask
