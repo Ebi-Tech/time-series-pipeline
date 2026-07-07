@@ -1,6 +1,6 @@
 # Time Series Pipeline — Electricity Demand Forecasting
 
-Group project for the Data Engineering formative: a full pipeline that takes
+This is a Group project for the Data Engineering formative: This is a full pipeline that takes
 hourly electricity demand data (PJM East, `PJME_hourly.csv`) from raw CSV to
 a trained forecasting model served behind a REST API.
 
@@ -150,7 +150,7 @@ venv again (`source venv/bin/activate`), and run:
 python3 scripts/predict.py
 ```
 
-This fetches the latest reading from the API, builds the feature vector the
+This is to fetche the latest reading from the API, builds the feature vector the
 model expects, and prints a demand forecast alongside the actual recorded
 value for comparison.
 
