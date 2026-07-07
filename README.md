@@ -1,6 +1,6 @@
 # Time Series Pipeline — Electricity Demand Forecasting
 
-Group project for the Data Engineering formative: a full pipeline that takes
+This is a Group project for the Data Engineering formative: This is a full pipeline that takes
 hourly electricity demand data (PJM East, `PJME_hourly.csv`) from raw CSV to
 a trained forecasting model served behind a REST API.
 
@@ -170,7 +170,7 @@ venv again (`source venv/bin/activate`), and run:
 python3 scripts/predict.py
 ```
 
-This fetches the latest reading from the API, builds the feature vector the
+This is to fetche the latest reading from the API, builds the feature vector the
 model expects, and prints a demand forecast alongside the actual recorded
 value for comparison.
 
@@ -246,7 +246,7 @@ feature engineering rationale, and experiment comparison table.
 
 | Member | Task | Contribution |
 |---|---|---|
-| Member 1 | Task 1 | EDA, feature engineering, model training & tuning (notebook, cleaned_data.csv, model artifact) |
-| Member 2 | Task 2/3 (SQL) | Relational schema design, ERD, SQL CRUD routes |
-| Member 3 | Task 2/3 (MongoDB) | Document schema design, data loader, sample queries, Mongo CRUD routes |
-| Member 4 | Task 3/4 + Report | Combined API (app.py), prediction script (predict.py), repo structure, README, final report |
+| Hikma Hamza | Task 1 | EDA, feature engineering, model training & tuning (notebook, cleaned_data.csv, model artifact) |
+| Morsal Hakim | Task 2/3 (SQL) | Relational schema design, ERD, SQL CRUD routes |
+| HonourGod Levison | Task 2/3 (MongoDB) | Document schema design, data loader, sample queries, Mongo CRUD routes |
+| Divine Ifechukwude | Task 3/4 + Report | Combined API (app.py), prediction script (predict.py), repo structure, README, final report |
