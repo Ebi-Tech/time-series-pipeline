@@ -94,14 +94,29 @@ brew install mysql
 brew services start mysql
 ```
 
-Then create the database:
+Then create the database and a dedicated application user (this project's
+scripts connect as `python_user`, not `root`, following the standard
+practice of not running an application with admin database privileges):
 
 ```bash
-mysql -u root -p -e "CREATE DATABASE energy_db;"
+mysql -u root
 ```
 
-Update the credentials in `app.py` (`MYSQL_CONFIG`) to match your local
-MySQL user/password if they differ from the defaults.
+At the `mysql>` prompt:
+
+```sql
+CREATE DATABASE energy_db;
+CREATE USER 'python_user'@'localhost' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON energy_db.* TO 'python_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+**This step is required** for `app.py` and `SQL/load_data.py` to connect
+successfully; without it, both will fail with `Access denied for user
+'python_user'@'localhost'`. If you'd rather use different credentials,
+update `MYSQL_CONFIG` in `app.py` and the connection block in
+`SQL/load_data.py` to match.
 
 ### 4. Load the data into both databases
 
@@ -118,10 +133,15 @@ step 2.
 **MySQL:**
 
 ```bash
-mysql -u root -p energy_db < SQL/schema.sql
+mysql -u root energy_db < SQL/schema.sql
 cd SQL
 python3 load_data.py
 ```
+
+`load_data.py` reads the CSV using a relative path (`../data/cleaned_data.csv`),
+so it must be run from inside the `SQL/` folder as shown above, not from the
+project root. If you see `FileNotFoundError: cleaned_data.csv`, check that
+the path inside `load_data.py` matches this.
 
 ### 5. Run the API
 
@@ -177,7 +197,9 @@ Predicted demand:  38213.68 MW
 | `ModuleNotFoundError: No module named 'pandas'` (or similar) | Dependencies not installed in the active environment | `source venv/bin/activate` then `pip install -r requirements.txt` |
 | `error: externally-managed-environment` | macOS/Homebrew Python blocks global `pip install` (PEP 668) | Use a virtual environment (see Setup step 1) instead of installing globally |
 | `pymongo.errors.ServerSelectionTimeoutError: ... Connection refused` | MongoDB server isn't installed or isn't running | Run `brew services list` to check; install/start with the commands in Setup step 2 |
-| `mysql.connector.errors.*` connection errors | MySQL isn't running, or `energy_db` doesn't exist, or credentials in `app.py` don't match | Confirm `brew services list` shows mysql started; re-check `MYSQL_CONFIG` in `app.py` |
+| `FileNotFoundError: [Errno 2] No such file or directory: 'cleaned_data.csv'` | `load_data.py` run from the wrong folder, or its internal path doesn't point to `../data/cleaned_data.csv` | Run `python3 load_data.py` from inside `SQL/`, and confirm the `pd.read_csv(...)` line inside it uses `../data/cleaned_data.csv` |
+| `mysql.connector.errors.ProgrammingError: 1045 ... Access denied for user 'python_user'@'localhost'` | The `python_user` MySQL account hasn't been created yet | Run the `CREATE USER` / `GRANT` commands in Setup step 3 |
+| `mysql.connector.errors.*` other connection errors | MySQL isn't running, or `energy_db` doesn't exist | Confirm `brew services list` shows mysql started; re-check `MYSQL_CONFIG` in `app.py` |
 | `predict.py` fails with a connection error | `app.py` isn't running | Start `python3 scripts/app.py` in a separate terminal first, then re-run `python3 scripts/predict.py` |
 
 **Expected (harmless) warnings when running `predict.py`:**
