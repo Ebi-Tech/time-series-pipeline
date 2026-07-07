@@ -224,7 +224,7 @@ feature engineering rationale, and experiment comparison table.
 
 | Member | Task | Contribution |
 |---|---|---|
-| Member 1 | Task 1 | EDA, feature engineering, model training & tuning (notebook, cleaned_data.csv, model artifact) |
-| Member 2 | Task 2/3 (SQL) | Relational schema design, ERD, SQL CRUD routes |
-| Member 3 | Task 2/3 (MongoDB) | Document schema design, data loader, sample queries, Mongo CRUD routes |
-| Member 4 | Task 3/4 + Report | Combined API (app.py), prediction script (predict.py), repo structure, README, final report |
+| Hikma Hamza | Task 1 | EDA, feature engineering, model training & tuning (notebook, cleaned_data.csv, model artifact) |
+| Morsal Hakim | Task 2/3 (SQL) | Relational schema design, ERD, SQL CRUD routes |
+| HonourGod Levison | Task 2/3 (MongoDB) | Document schema design, data loader, sample queries, Mongo CRUD routes |
+| Divine Ifechukwude | Task 3/4 + Report | Combined API (app.py), prediction script (predict.py), repo structure, README, final report |
