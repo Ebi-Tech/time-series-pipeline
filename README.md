@@ -87,7 +87,7 @@ brew services list   # should show mongodb-community as "started"
 If you're not on macOS, install MongoDB Community Server for your OS from
 the official MongoDB docs and ensure it's listening on `localhost:27017`.
 
-### 3. Install and start MySQL
+### 3. Install and start MySQL.
 
 ```bash
 brew install mysql
