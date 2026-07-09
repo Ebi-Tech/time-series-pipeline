@@ -4,7 +4,7 @@ This is a Group project for the Data Engineering formative: This is a full pipel
 hourly electricity demand data (PJM East, `PJME_hourly.csv`) from raw CSV to
 a trained forecasting model served behind a REST API.
 
-## Project Structure
+## Project Structure..
 
 ```
 time-series-pipeline/
