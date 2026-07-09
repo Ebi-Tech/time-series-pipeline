@@ -212,7 +212,7 @@ Predicted demand:  38213.68 MW
   but `predict.py` passes a plain list. Cosmetic only; the prediction is
   unaffected.
 
-## Why predict.py queries MongoDB, not SQL
+## Why predict.py queries MongoDB, not SQL..
 
 Both databases were required for Tasks 2 and 3 to demonstrate two different
 schema design approaches on the same dataset: a normalized relational model
