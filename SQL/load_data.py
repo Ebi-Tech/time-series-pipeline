@@ -2,7 +2,7 @@ import pandas as pd
 import mysql.connector
 
 # Read CSV
-df = pd.read_csv("cleaned_data.csv")
+df = pd.read_csv("../data/cleaned_data.csv")
 
 print("CSV loaded successfully.")
 print("Number of rows:", len(df))
