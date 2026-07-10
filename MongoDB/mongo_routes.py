@@ -28,7 +28,7 @@ def serialize(doc):
     return doc
 
 
-# 1. POST - Add a reading
+# 1. POST - Adding a reading
 @app.route("/mongo/readings", methods=["POST"])
 def create_reading():
     data = request.json
@@ -102,7 +102,7 @@ def readings_range():
     return jsonify([serialize(doc) for doc in cursor])
 
 
-# 5. PUT - Update demand
+# 5. PUT - Updating demand
 @app.route("/mongo/readings/<id>", methods=["PUT"])
 def update_reading(id):
     data = request.json
@@ -121,7 +121,7 @@ def update_reading(id):
     return jsonify({"status": "updated"})
 
 
-# 6. DELETE - Delete a reading
+# 6. DELETE - Deleting a reading
 @app.route("/mongo/readings/<id>", methods=["DELETE"])
 def delete_reading(id):
     collection = get_collection()

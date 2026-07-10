@@ -79,7 +79,3 @@ Endpoints (base `http://localhost:5001`):
 | PUT    | `/mongo/readings/<id>`    | Update `demand_mw`           |
 | DELETE | `/mongo/readings/<id>`    | Delete a reading             |
 
-## Sample queries
-
-Run `python mongo_queries.py` for the three demo queries; results are also
-in the group report.
